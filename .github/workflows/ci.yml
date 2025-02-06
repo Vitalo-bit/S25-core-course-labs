@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -55,17 +55,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r app_python/requirements.txt
 
+      - uses: snyk/actions/setup@master
       - name: Run Snyk Security Scan
-        uses: snyk/actions/python@master
-        with:
-          args: --severity-threshold=high
+        run: |
+                pip install -r app_python/requirements.txt
+                snyk test --file=app_python/requirements.txt
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
